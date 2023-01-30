@@ -9,9 +9,6 @@ from comics import get_comic_image, get_comic_by_id, get_last_comic_number
 
 
 def get_wall_upload_server(access_token: str, group_id: str) -> WallUploadServer:
-    """
-    Получает адрес сервера для загрузки фото
-    """
     url = "https://api.vk.com/method/photos.getWallUploadServer"
     params = {
         "access_token": access_token,
@@ -24,9 +21,6 @@ def get_wall_upload_server(access_token: str, group_id: str) -> WallUploadServer
 
 
 def load_photo_to_server(comic: Comic, environs: dict) -> UploadedImage:
-    """
-    Загружает фото на сервер
-    """
     upload_server = get_wall_upload_server(environs["access_token"], environs["group_id"])
     image_file_name = get_comic_image(comic)
     with open(image_file_name, "rb") as file:
@@ -38,9 +32,6 @@ def load_photo_to_server(comic: Comic, environs: dict) -> UploadedImage:
 
 
 def save_wall_photo(uploaded_image: UploadedImage, environs: dict) -> SavedImage:
-    """
-    Сохраняет фото на сервере
-    """
     url = "https://api.vk.com/method/photos.saveWallPhoto"
     params = {
         "access_token": environs["access_token"],
