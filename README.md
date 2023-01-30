@@ -11,10 +11,10 @@
 pip install -r requirements.txt
 ```
 
-- Для работы с [vk.com](https://vk.com) вам потребуется зарегистрироваться, получить `GROUP_ID`, `USER_ID`
-  и `ACCESS_TOKEN`  
+- Для работы с [vk.com](https://vk.com) вам потребуется зарегистрироваться, создать приложение
+  на [странице разработчиком](https://dev.vk.com/). Затем получить `GROUP_ID`, `USER_ID`  и `ACCESS_TOKEN`  
   Как это сделать, можно почитать [здесь](https://dev.vk.com/api/access-token/implicit-flow-user)
-- Все полученные токены необходимо поместить в файл .env в соответствующие переменные
+- Все полученные токены и id необходимо поместить в файл .env в соответствующие переменные
     - **ACCESS_TOKEN**
     - **GROUP_ID**
     - **USER_ID**
