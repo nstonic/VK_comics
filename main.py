@@ -8,11 +8,11 @@ from classes import Comic, WallUploadServer, UploadedImage, SavedImage, Environs
 from comics import get_comic_image, get_comic_by_id, get_last_comic_number
 
 
-def get_wall_upload_server(access_token: str, group_id: str) -> WallUploadServer:
+def get_wall_upload_server(environs: Environs) -> WallUploadServer:
     url = "https://api.vk.com/method/photos.getWallUploadServer"
     params = {
-        "access_token": access_token,
-        "group_id": group_id,
+        "access_token": environs.access_token,
+        "group_id": environs.group_id,
         "v": "5.124"
     }
     response = requests.get(url, params=params)
@@ -21,7 +21,8 @@ def get_wall_upload_server(access_token: str, group_id: str) -> WallUploadServer
 
 
 def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
-    upload_server = get_wall_upload_server(environs.access_token, environs.group_id)
+    upload_server = get_wall_upload_server(environs)
+
     image_file_name = get_comic_image(comic)
     with open(image_file_name, "rb") as file:
         files = {"file1": file}
