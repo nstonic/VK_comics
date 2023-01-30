@@ -25,8 +25,7 @@ def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
 
     image_file_name = get_comic_image(comic)
     with open(image_file_name, "rb") as file:
-        files = {"file1": file}
-        response = requests.post(upload_server.upload_url, files=files)
+        response = requests.post(upload_server.upload_url, files={"file1": file})
     os.remove(image_file_name)
     response.raise_for_status()
     return UploadedImage.parse_raw(response.text)
