@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from pydantic import BaseModel, Field
 
 
@@ -23,3 +25,10 @@ class UploadedImage(BaseModel):
 class SavedImage(BaseModel):
     media_id: int = Field(alias="id")
     owner_id: int
+
+
+@dataclass
+class Environs:
+    access_token: str
+    group_id: int
+    user_id: int
