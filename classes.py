@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import NamedTuple
 
 from pydantic import BaseModel, Field
 
@@ -27,8 +28,7 @@ class SavedImage(BaseModel):
     owner_id: int
 
 
-@dataclass
-class Environs:
+class Environs(NamedTuple):
     access_token: str
     group_id: int
     user_id: int
