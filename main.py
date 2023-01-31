@@ -3,8 +3,7 @@ from random import randint
 from dotenv import load_dotenv
 
 from classes import *
-from comics import get_comic_by_id
-from comics import get_last_comic_number
+from comics import get_comic_by_id, get_last_comic_number
 
 
 def get_wall_upload_server(environs: Environs) -> WallUploadServer:
@@ -73,8 +72,10 @@ def main():
         user_id=int(os.environ["USER_ID"])
     )
     comic = get_comic_by_id(randint(1, get_last_comic_number()))
-    post_on_wall(comic, environs)
-    os.remove(comic.image_file_name)
+    try:
+        post_on_wall(comic, environs)
+    finally:
+        os.remove(comic.image_file_name)
 
 
 if __name__ == '__main__':
