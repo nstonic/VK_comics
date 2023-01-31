@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 from classes import *
 from comics import get_comic_by_id, get_last_comic_number
+from exceptions import check_response_for_error
 
 
 def get_wall_upload_server(environs: Environs) -> WallUploadServer:
@@ -14,7 +15,7 @@ def get_wall_upload_server(environs: Environs) -> WallUploadServer:
         "v": "5.124"
     }
     response = requests.get(url, params=params)
-    response.raise_for_status()
+    check_response_for_error(response)
     return WallUploadServer.parse_obj(response.json()['response'])
 
 
@@ -23,7 +24,7 @@ def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
     comic.download_comic_image()
     with open(comic.image_file_name, "rb") as file:
         response = requests.post(upload_server.upload_url, files={"file1": file})
-    response.raise_for_status()
+    check_response_for_error(response)
     return UploadedImage.parse_raw(response.text)
 
 
@@ -39,7 +40,7 @@ def save_wall_photo(uploaded_image: UploadedImage, environs: Environs) -> SavedI
         "v": "5.124"
     }
     response = requests.get(url, params=params)
-    response.raise_for_status()
+    check_response_for_error(response)
     return SavedImage.parse_obj(response.json()["response"][0])
 
 
@@ -61,7 +62,7 @@ def post_on_wall(comic: Comic, environs: Environs):
         "server": uploaded_image.server
     }
     response = requests.post(url, params=params)
-    response.raise_for_status()
+    check_response_for_error(response)
 
 
 def main():
