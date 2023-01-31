@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 
 
 class VKAPIRequestError(HTTPError):
-    def __init__(self, error):
+    def __init__(self, error: dict):
         self.error_code = error["error_code"]
         self.error_msg = error["error_msg"]
         self.method = next(filter(lambda param: param["key"] == "method", error["request_params"]))
