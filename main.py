@@ -1,11 +1,10 @@
-import os
 from random import randint
 
 from dotenv import load_dotenv
-import requests
 
-from classes import Comic, WallUploadServer, UploadedImage, SavedImage, Environs
-from comics import get_comic_image, get_comic_by_id, get_last_comic_number
+from classes import *
+from comics import get_comic_by_id
+from comics import get_last_comic_number
 
 
 def get_wall_upload_server(environs: Environs) -> WallUploadServer:
@@ -22,11 +21,9 @@ def get_wall_upload_server(environs: Environs) -> WallUploadServer:
 
 def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
     upload_server = get_wall_upload_server(environs)
-
-    image_file_name = get_comic_image(comic)
-    with open(image_file_name, "rb") as file:
+    comic.download_comic_image()
+    with open(comic.image_file_name, "rb") as file:
         response = requests.post(upload_server.upload_url, files={"file1": file})
-    os.remove(image_file_name)
     response.raise_for_status()
     return UploadedImage.parse_raw(response.text)
 
@@ -77,6 +74,7 @@ def main():
     )
     comic = get_comic_by_id(randint(1, get_last_comic_number()))
     post_on_wall(comic, environs)
+    os.remove(comic.image_file_name)
 
 
 if __name__ == '__main__':
