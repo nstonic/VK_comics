@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import NamedTuple
 
 from pydantic import BaseModel, Field
