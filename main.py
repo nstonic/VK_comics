@@ -64,7 +64,8 @@ def post_on_wall(comic: Comic, environs: Environs):
         "photo": uploaded_image.photo,
         "server": uploaded_image.server
     }
-    requests.post(url, params=params)
+    response = requests.post(url, params=params)
+    response.raise_for_status()
 
 
 def main():
