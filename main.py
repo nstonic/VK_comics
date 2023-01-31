@@ -16,7 +16,7 @@ def get_wall_upload_server(environs: Environs) -> WallUploadServer:
     }
     response = requests.get(url, params=params)
     check_response_for_error(response)
-    return WallUploadServer.parse_obj(response.json()['response'])
+    return WallUploadServer.parse_obj(response.json()["response"])
 
 
 def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
@@ -34,9 +34,9 @@ def save_wall_photo(uploaded_image: UploadedImage, environs: Environs) -> SavedI
         "access_token": environs.access_token,
         "user_id": environs.user_id,
         "group_id": environs.group_id,
-        'hash': uploaded_image.hash,
-        'photo': uploaded_image.photo,
-        'server': uploaded_image.server,
+        "hash": uploaded_image.hash,
+        "photo": uploaded_image.photo,
+        "server": uploaded_image.server,
         "v": "5.124"
     }
     response = requests.get(url, params=params)
