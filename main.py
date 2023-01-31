@@ -76,7 +76,8 @@ def main():
     try:
         post_on_wall(comic, environs)
     finally:
-        os.remove(comic.image_file_name)
+        if comic.image_file_name:
+            os.remove(comic.image_file_name)
 
 
 if __name__ == '__main__':

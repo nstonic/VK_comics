@@ -11,7 +11,7 @@ class Comic(BaseModel):
     safe_title: str
     alt: str
     image_url: str = Field(alias="img")
-    image_file_name: str = ""
+    image_file_name: str = None
 
     def _get_image_file_name(self):
         parsed_link = unquote(urlparse(self.image_url).path)
