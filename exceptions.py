@@ -1,8 +1,8 @@
 from requests import Response
-from requests.exceptions import RequestException
+from requests.exceptions import HTTPError
 
 
-class VKAPIRequestError(RequestException):
+class VKAPIRequestError(HTTPError):
     def __init__(self, error):
         self.error_code = error["error_code"]
         self.error_msg = error["error_msg"]
