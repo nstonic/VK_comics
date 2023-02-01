@@ -1,9 +1,16 @@
+import os
 from random import randint
 
+import requests
 from dotenv import load_dotenv
 
-from classes import *
-from comics import get_comic_by_id, get_last_comic_number
+from classes import Comic
+from classes import Environs
+from classes import SavedImage
+from classes import UploadedImage
+from classes import WallUploadServer
+from comics import get_last_comic_number
+from comics import get_comic_by_id
 from exceptions import check_response_for_error
 
 
@@ -20,15 +27,19 @@ def get_wall_upload_server(environs: Environs) -> WallUploadServer:
 
 
 def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
-    upload_server = get_wall_upload_server(environs)
+    upload_server = get_wall_upload_server(environs=environs)
     comic.download_comic_image()
     with open(comic.image_file_name, "rb") as file:
-        response = requests.post(upload_server.upload_url, files={"file1": file})
+        response = requests.post(
+            upload_server.upload_url,
+            files={"file1": file}
+        )
     check_response_for_error(response)
     return UploadedImage.parse_raw(response.text)
 
 
-def save_wall_photo(uploaded_image: UploadedImage, environs: Environs) -> SavedImage:
+def save_wall_photo(uploaded_image: UploadedImage,
+                    environs: Environs) -> SavedImage:
     url = "https://api.vk.com/method/photos.saveWallPhoto"
     params = {
         "access_token": environs.access_token,
@@ -45,10 +56,16 @@ def save_wall_photo(uploaded_image: UploadedImage, environs: Environs) -> SavedI
 
 
 def post_on_wall(comic: Comic, environs: Environs):
-    uploaded_image = load_photo_to_server(comic, environs)
-    saved_image = save_wall_photo(uploaded_image, environs)
-
     url = "https://api.vk.com/method/wall.post"
+    uploaded_image = load_photo_to_server(
+        comic=comic,
+        environs=environs
+    )
+    saved_image = save_wall_photo(
+        uploaded_image=uploaded_image,
+        environs=environs
+    )
+
     params = {
         "access_token": environs.access_token,
         "v": "5.124",
@@ -72,7 +89,12 @@ def main():
         group_id=int(os.environ["GROUP_ID"]),
         user_id=int(os.environ["USER_ID"])
     )
-    comic = get_comic_by_id(randint(1, get_last_comic_number()))
+    comic = get_comic_by_id(
+        randint(
+            1,
+            get_last_comic_number()
+        )
+    )
     try:
         post_on_wall(comic, environs)
     finally:

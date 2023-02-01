@@ -6,10 +6,16 @@ class VKAPIRequestError(HTTPError):
     def __init__(self, error: dict):
         self.error_code = error["error_code"]
         self.error_msg = error["error_msg"]
-        self.method = next(filter(lambda param: param["key"] == "method", error["request_params"]))
+        self.method = (
+            param["value"] for param
+            in error["request_params"]
+            if param["key"] == "method"
+        )
 
     def __str__(self):
-        return f"\nError code: {self.error_code}\nMethod: {self.method['value']}\n{self.error_msg}"
+        return f"Error code: {self.error_code}" \
+               f"\nMethod: {next(self.method)}" \
+               f"\n{self.error_msg}"
 
 
 def check_response_for_error(response: Response):
