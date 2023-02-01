@@ -8,13 +8,12 @@ from classes import Comic
 from classes import Environs
 from classes import SavedImage
 from classes import UploadedImage
-from classes import WallUploadServer
 from comics import get_last_comic_number
 from comics import get_comic_by_id
 from exceptions import check_response_for_error
 
 
-def get_wall_upload_server(environs: Environs) -> WallUploadServer:
+def get_wall_upload_server(environs: Environs) -> str:
     url = "https://api.vk.com/method/photos.getWallUploadServer"
     params = {
         "access_token": environs.access_token,
@@ -23,7 +22,7 @@ def get_wall_upload_server(environs: Environs) -> WallUploadServer:
     }
     response = requests.get(url, params=params)
     check_response_for_error(response)
-    return WallUploadServer.parse_obj(response.json()["response"])
+    return response.json()["response"]["upload_url"]
 
 
 def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
@@ -31,7 +30,7 @@ def load_photo_to_server(comic: Comic, environs: Environs) -> UploadedImage:
     comic.download_comic_image()
     with open(comic.image_file_name, "rb") as file:
         response = requests.post(
-            upload_server.upload_url,
+            upload_server,
             files={"file1": file}
         )
     check_response_for_error(response)

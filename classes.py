@@ -26,12 +26,6 @@ class Comic(BaseModel):
             img_file.write(response.content)
 
 
-class WallUploadServer(BaseModel):
-    upload_url: str
-    album_id: int
-    user_id: int
-
-
 class UploadedImage(BaseModel):
     hash: str
     photo: str
