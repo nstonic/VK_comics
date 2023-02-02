@@ -7,8 +7,8 @@ class VKAPIRequestError(HTTPError):
         self.error_code = error["error_code"]
         self.error_msg = error["error_msg"]
         self.method = (
-            param["value"] for param
-            in error["request_params"]
+            param["value"]
+            for param in error["request_params"]
             if param["key"] == "method"
         )
 
